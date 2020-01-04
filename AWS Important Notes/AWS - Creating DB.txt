@@ -1,0 +1,90 @@
+AWS - RDS::
+	DB Instance Identifier :: AWSDemo
+	DB Username :: CustomSolutions    
+	DB Password :: javadevteam
+	
+	DB Name :: AWSDEV
+	port    :: 1521
+	
+	
+===
+
+Create a DB instance from AWS Dashboard..
+	Click on RDS & launch DB instance
+	
+	Select any one DB type --- oracle/mySQL/...
+	
+	Fill the details such as DB Instance Identifier, Username, password, port number, & DB name..
+	
+	Once done, click on Create DB instance.
+	
+	This will take sometime in creating the instance....
+	
+	Once created, copy the endpoint (hostname) of DB from AWS Dashboard....
+	
+	Check whether it is working or not
+	
+		Open SQL Developer --> Create New DB Connection
+		
+		Provide Username, password, host (endpoint copied from AWS Dashboard) & in SID field .. provide the DB name (in this case, it is AWSDEV)
+		
+		Test the connection.
+		
+		Facing Network adapter issue? this is due to security/firewall in AWS..
+			
+			Go to DB instance dashboard.. select security group..Click on Edit --> Add Rule
+				
+				here select -- Custom TCP Rule then port number as 1521.. then in source field, dont fill anything & click save.
+				
+		Now try to test the connection, it will be successfull
+		
+===============
+
+DB Example::
+	
+CREATE TABLE EMP
+( EMP_ID int NOT NULL,
+  EMP_NAME varchar2(20) NOT NULL,
+  EMP_EMAIL_ID varchar2(50)
+);
+
+ALTER TABLE EMP
+ADD CONSTRAINT emp_id UNIQUE (EMP_ID);
+
+================
+
+http://ec2-18-232-158-17.compute-1.amazonaws.com:8080/AWSDemo/healthCheck
+http://ec2-18-232-158-17.compute-1.amazonaws.com:8080/AWSDemo/Employee/listEmpDetails
+
+================
+
+ {
+    "empId": 2,
+    "empName": "Meenakshi R",
+    "empEmailId": "Meenakshi.r@flex.com"
+  }
+  
+========
+
+Local REST Endpoints:
+	
+	http://localhost:8080/healthCheck
+	http://localhost:8080//Employee/createEmloyee
+	http://localhost:8080/Employee/updateEmployee
+	http://localhost:8080/Employee/deleteEmployee?empId=7
+	http://localhost:8080/Employee/listEmpDetails
+	
+AWS REST Endpoints:
+	
+	http://ec2-18-232-158-17.compute-1.amazonaws.com:8080/AWSDemo/healthCheck
+	http://ec2-18-232-158-17.compute-1.amazonaws.com:8080/AWSDemo/Employee/listEmpDetails
+	http://ec2-18-232-158-17.compute-1.amazonaws.com:8080/AWSDemo/Employee/createEmloyee
+	http://ec2-18-232-158-17.compute-1.amazonaws.com:8080/AWSDemo/Employee/updateEmployee
+	http://ec2-18-232-158-17.compute-1.amazonaws.com:8080/AWSDemo/Employee/deleteEmployee
+
+=============
+Note::
+
+When trying to hit the above resources in ec2 instance (using putty), results of the resources will get saved in below path
+
+Location where resource output will get saved :: /home/ec2-user

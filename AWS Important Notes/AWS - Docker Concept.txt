@@ -1,0 +1,238 @@
+
+Docker Concepts:
+	
+	Dockers can be run only on Unix/Linux system.
+	So your host machine can be of any OS.. Create a VM with Unix/Linux system and build many Docker Containers on to it.
+	
+	Problems before Docker:
+	
+		1) Code works fine in Developer's laptop, but not in Higher environment (QA & PROD). 
+		   This is due to the difference in the softwares installed on different environments & softwares in my machine might have been upgraded.
+		   
+		2) In Microservice architecture, each service will be running on a seperate VM. Though the service is light-weight, each VM occupies more space & RAM 
+		   which is kind of wastage (not utlizing the resource to the fullest).. so this is not a proper way to acheive microservice architecture.
+		 
+		Ref :: Prob before Docker in Microservices image in AWS/Docker folder	
+	 
+		How Docker solved it?
+			Dockers provides a consistent computing environment throughout DEV, QA & PROD
+			
+			In Microservices, using one VM machine, many Docker Containers can be created over a single VM & comparing Docker with VM, Docker is very light weight 
+			and occupies only required memory space
+			
+			Ref :: Solving Prob in Microservice using Docker image in AWS/Docker folder
+			
+	Docker in a nutshell:
+	
+		Dockerfile   --> file which has step by step instructions regarding the code changes, environment(such as JDK 1.8 or Python)
+						required to generate/build a docker image.
+						
+		Docker image --> a deployable component (similar to .jar or .war file) contains the code changes, its dependencies & working environment (i.e., bin & libs)
+		
+		Docker Container --> this is built over a VM & it provides a runtime environment for Docker Image.
+		
+		Docker Registry  --> registry or repository (similar to Git/Maven repository) for hosting/storing all the docker images. Push/Pull is possible here.
+							Eg. for Docker Registry is Docker Hub.
+							
+		Ref :: Docker in a nutshell, Docker images and Containers & Docker Architecture in AWS/Docker folder
+	
+	Installing Docker in AWS - EC2 instance:
+		
+		Login to the instance using putty
+		
+		First take the update:
+			sudo yum update -y
+	
+		Install Docker:
+			sudo yum install -y docker
+	
+		Start the Docker service:
+			sudo service docker start
+	
+		Assign ec2-user as a member of docker:
+			sudo usermod -a -G docker ec2-user
+	
+		Check Docker:
+			docker info
+			
+			Facing permission denied exception.. try to reboot the instance..
+			
+			Reboot instance::
+				sudo reboot
+	
+			Now again, execute..
+				docker info ===> this is provide all the information about docker
+		
+		Check Docker version::
+			docker --version
+		
+		Test the Docker is working fine?::
+			docker run hello-world
+			
+			since hello-world docker image is not in local repo, docker will pull the image from docker hub & will display the output
+			output :: Hello from Docker!
+		
+		List down the images downloaded to the machine:
+			docker image ls
+			
+		Now check the docker info, docker info 
+			This will print the docker info as below:
+				
+				Containers: 1 [see the difference, 0 has been changed to 1]
+				 Running: 0
+				 Paused: 0
+				 Stopped: 1 [see the difference, 0 has been changed to 1]
+				 Images: 1 [see the difference, 0 has been changed to 1]
+
+		Ref:: https://www.youtube.com/watch?v=wfjzhudJzN0
+			  https://docs.docker.com/get-started/#conclusion-of-part-one
+	
+	--
+	
+	Create a Dockerfile & run in Docker container using AWS EC2 instance:
+	
+		check docker is installed or not?:
+			docker info
+			
+		Create a docker file using vi editor:
+			vi dockerfile [copy the contents of your docker file, paste & save it]
+			
+		Build the docker file to generate a docker image:
+			syntax :: docker build -t <docker_image_name> <location of docker file>
+			
+			Important note :: name of the image should be in lower case.
+			
+			docker build -t myfirstimage . [here pull stop refers to current folder]
+			
+				-- the above command will execute the steps provided in the docker file & will generate the docker image.
+			
+		To view the list of docker images:
+			docker images
+		
+		Run	the docker image in docker container:
+			syntax :: docker run -p 80:80 <docker_image_name>
+			
+			docker run -p 80:80 myfirstimage
+			
+			this will run the docker image in docker container.. to verify this..
+			
+			docker info	
+			
+				here, we could see number of docker container/images running.
+					Container :1
+						running : 1
+					
+		Docker Commands & Sample Dockerfile for a SpringBoot App JAR ::
+			
+			Ref :: https://www.youtube.com/watch?v=FlSup_eelYE
+			
+			Dockerfile -- Create this file on the root of the Project (in-line with pom.xml)
+			
+			Note:: let's assume the below project generates a jar file with name as aws-docker-spring
+			
+			FROM openjdk:8
+			ADD  target/aws-docker-spring.jar aws-docker-spring.jar
+			EXPOSE 8080
+			ENTRYPOINT ["java","-jar","aws-docker-spring.jar"]
+			
+			Explanation:
+				1) FROM ==> since it's a java project, we are fetching the base image from Java. For the first time, it will download the 
+							java base image from docker hub & keeps in local machine
+			Proj. Structure:
+				AWSDemo
+					src
+						main
+							.....
+				Dockerfile
+				pom.xml
+				
+				
+			To build a docker image,
+				syntax:: docker build -f Dockerfile -t <docker-image-name> . [pull stop at the end specifies the location of Dockerfile]
+				
+						 docker build -f Dockerfile -t aws-docker-spring . 
+				
+			To check whether the image is built/ to list out the images,
+				docker images  [This will list out the list of docker images available along with created timestamp]
+				
+			
+			To run the docker image on a docker container,
+			
+				Syntax :: docker run -p <docker container's port number>:<machine's port number> <docker-image-name>
+				
+						  docker run -p 8080:8080 aws-docker-spring
+				
+			To run the docker in the background [run even when putty is closed]
+					
+					docker run -it -d -p 8080:8080 aws-docker-spring
+					
+			To list out the docker containers:
+			
+					docker ps -a [This will list out the container ID, image name, when it is started & exited.]
+						
+			To stop the container:		
+				docker stop <docker container ID>
+				
+			To remove/delete the container:
+				docker rm <docker container ID>
+				
+		
+		Docker Commands & Sample Dockerfile for a SpringBoot App WAR ::
+		
+			Reference :: https://www.javainuse.com/devOps/docker/docker-war
+
+			From tomcat:8.0.51-jre8-alpine
+			CMD ["catalina.sh","run"]
+
+			cd to downloaded tomcat/bin & execute the below command
+				chmod +x catalina.sh
+
+			docker build -t awsdemo .
+
+			docker images
+
+			docker run -it -d -p 8080:8080 awsdemo
+				docker container is running! container ID is (let's say) :: c20ehdvjasksbsdvdbdvb [save/remember the first two letters of container ID]
+				
+			hit the browser & open the tomcat page, it should get opened! [http://<DNS-NAME>:8080]
+
+			To view the tomcat directory of the tomcat image
+			
+				docker container exec -it <first two letters of container ID> /bin/sh
+				
+					example :: docker container exec -it c2 /bin/sh
+				
+				this command will take you inside the tomcat image
+				
+				perform ls [list] command & you should be able to see webapps folder & other tomcat folders too.
+				
+				cd webapps
+				
+				so, now directory [pwd] will be /usr/local/tomcat/webapps
+				
+				exit [this will exit out of tomcat image]
+				 
+			Stop the current docker container
+
+				docker stop <container ID>
+				
+			Modify the Dockerfile with below contents
+				From tomcat:8.0.51-jre8-alpine
+				RUN rm -rf /usr/local/tomcat/webapps/*
+				COPY target/AWSDemo.war /usr/local/tomcat/webapps/
+				CMD ["catalina.sh","run"]
+
+			Rebuild the Docker image
+				docker build -t awsdemo .
+
+			Run the Docker container
+				docker run -it -d -p 8080:8080 awsdemo
+	
+			This will deploy the app in tomcat image & run in the docker container!
+	
+	
+		To view the docker container logs,
+			
+			Syntax :: docker logs --tail all <CONTAINER-ID>
+			  
+			Example :: docker logs --tail all eae9495cdcc9

@@ -1,0 +1,41 @@
+Method 1:
+
+Installing Maven in AWS Linux Machine
+
+sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo\
+sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+sudo yum install -y apache-maven
+mvn --version
+
+
+Location of Maven will be in :: /etc/maven
+
+============================
+
+Method 2:
+
+Download Maven as tar file,
+	wget http://mirrors.ocf.berkeley.edu/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+	
+Extract the tar file,
+	tar xvfz <<downloaded maven file name with extension>>
+	
+pwd, to copy the working directory...
+
+cd /root
+
+ls -la [this will list out all the files starting with . (eg:: .bash_profile,.bash_history)]
+ 
+vi .bash_profile [go to insert mode]
+
+M2_HOME=/usr/softwares/apache-maven-3.5.4
+
+ATH=$PATH:$HOME/bin:$M2_HOME/bin
+
+save the file using .. press esc key.. then :wq
+
+open putty in a new session & enter..
+
+mvn -version
+
+This should print the maven version

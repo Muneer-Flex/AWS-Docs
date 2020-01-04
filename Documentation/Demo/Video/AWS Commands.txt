@@ -1,0 +1,85 @@
+Updating the OS
+	sudo yum update
+
+cd /usr
+
+sudo su
+mkdir softwares
+
+Installing yum
+	Yum install wget
+
+Java installation
+	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u141-b15/336fa29ff2bb4ef291e347e091f7f4a7/jdk-8u141-linux-x64.rpm"
+
+	yum install <downloaded file name>
+	
+Download & install tomcat
+	wget http://www.gtlib.gatech.edu/pub/apache/tomcat/tomcat-8/v8.5.34/bin/apache-tomcat-8.5.34.tar.gz
+	
+	tar xvfz <downloaded tomcat file name with extension>
+	
+	<role rolename="manager-gui"/>
+	<role rolename="manager-script"/>
+	<role rolename="manager-jmx"/>
+	<role rolename="manager-status"/>
+	<user username="admin" password="admin" roles="manager-gui,manager-script,manager-jmx,manager-status"/>
+	
+	manager.xml 
+		<Context privileged="true" antiResourceLocking="false" 
+         docBase="${catalina.home}/webapps/manager">
+			<!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="^.*$" /> -->
+		</Context>
+	
+	Enable security group & Boot up the server.. once booted, shut it down
+		
+Installing Maven;
+	sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo\
+	sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+	sudo yum install -y apache-maven
+	mvn --version
+	
+Installing Git:
+	sudo yum install git
+	
+	git --version
+	
+Create a workspace directory & clone the project
+	https://github.com/amtaj/demo-docker-springboot.git
+	
+Install & Booting up Docker:
+		sudo yum install -y docker
+	
+		Start the Docker service:
+			sudo service docker start
+	
+		Assign ec2-user as a member of docker:
+			sudo usermod -a -G docker ec2-user
+	
+		Check Docker:
+			docker info
+			
+			Facing permission denied exception.. try to reboot the instance..
+			
+			Reboot instance::
+				sudo reboot
+	
+			Now again, execute..
+				docker info ===> this is provide all the information about docker
+		
+		Check Docker version::
+			docker --version
+			
+Build a Docker image:
+	docker build -t awsdemo .
+	
+List out the docker images:
+	docker images
+	
+Run the docker image in container:
+	docker run -it -d -p 8080:8080 awsdemo
+	
+List out the docker containers:
+	docker ps -a
+	
+Hit the browser & run the app

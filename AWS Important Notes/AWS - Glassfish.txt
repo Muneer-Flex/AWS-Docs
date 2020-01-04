@@ -1,0 +1,32 @@
+AWS - Glassfish Installation
+
+	wget http://download.java.net/glassfish/4.1/release/glassfish-4.1.zip
+	
+	unzip <downloaded file name>
+	
+	============
+	
+	Alternate way,
+	
+		copy downloaded file from my machine to AWS Linux machine	
+		
+		Open cmd & type pscp
+		
+		
+		pscp -i <name of the PPK file> <source of downloaded glassfish file> ec2-user@<public DNS>: [colon at the end defines, it should be copied to a remote server]
+		
+		it will copy & paste the glassfish in /home/ec2-user
+		
+	===============
+	
+	AWS Cli
+	
+		Username: Muneer
+		password: Sept@12345
+		
+		Access key ID: AKIAJ7CD36AAMGGUAEUA
+		secret access key: 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
+		
+		Users with AWS Management Console access can sign-in at: https://446402782650.signin.aws.amazon.com/console
+		
+		Group name: Muneer

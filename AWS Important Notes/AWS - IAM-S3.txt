@@ -1,0 +1,69 @@
+S3 Bucket,
+	Create a bucket with unique name [name should be in lower case]
+	
+	Zip the project & upload it.
+
+
+
+AWS Cli:
+
+In the AWS Console, Search for IAM
+
+Then select users from the left hand side bar menu...
+
+Click on Add user..
+
+	Step 1
+		Enter user name
+		Select the check box for Programmatic access & AWS Management Console access
+		Select Custom generated password
+		uncheck Require password reset
+		
+	Step 2
+		Click on Create Group and Enter a group name & select permission policies [as of now select Administrator]
+		
+	Step 3
+		Click on Create user.. once done, it will give the below details
+		
+		Access key ID: AKIAJ7CD36AAMGGUAEUA
+		secret access key: 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
+
+To download the files from s3 bucket,		
+	Now login into ec2 instance using putty,
+
+	1st command to configure AWS CLI
+		aws configure
+			this will prompt for Access key ID & secret access key
+			
+	2nd command to download from s3 bucket,
+		aws s3 sync s3://<name of the bucket> . [pull stop at the end defines the downloading location]
+		
+	To delete a directory,
+	rm -rf <folder name>
+		========================
+		
+	
+		Username: Muneer
+		password: Sept@12345
+		
+		Access key ID: AKIAJ7CD36AAMGGUAEUA
+		secret access key: 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
+		
+		Users with AWS Management Console access can sign-in at: https://446402782650.signin.aws.amazon.com/console
+		
+		Group name: Muneer
+		
+		aws s3 sync s3://awscruddemo .
+
+=======================
+
+My Bucket details
+	IAM user name :: Muneer
+	IAM user password :: Sept@12345
+	
+	Bucket name :: empmanagement
+	
+	Access Key ID :: AKIAJIOJFZDFOMELCCLQ
+	Secret Access key :: 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
+	
+	aws s3 sync s3://empmanagement .

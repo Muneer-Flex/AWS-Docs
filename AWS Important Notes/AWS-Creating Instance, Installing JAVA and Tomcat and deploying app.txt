@@ -1,0 +1,90 @@
+Public DNS created for AWSDemo keypair :: ec2-18-232-158-17.compute-1.amazonaws.com
+
+In putty, Login as :
+ec2-user
+
+Sudo yum update
+
+Cd ../..
+
+Cd usr
+
+To login as Super User (for creating directory)
+	Sudo su
+
+Create a folder - Java
+	Mkdir java
+
+Cd java
+
+To install wget:
+	Yum install wget
+
+To install java:
+	wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u141-b15/336fa29ff2bb4ef291e347e091f7f4a7/jdk-8u141-linux-x64.rpm"
+	
+	yum install <downloaded file name>
+	
+	yum install jdk-8u45-linux-x64.rpm
+	
+If by default, java is not installed in AWS -linux machine,
+
+Install OpenJDK 8 JRE,
+	sudo yum install java-1.8.0-openjdk
+
+Install OpenJDK 8 JDK,
+	sudo yum install java-1.8.0-openjdk-devel
+
+To switch the java version (from 1.8 to 1.7 or vice versa)
+	
+	sudo update-alternatives --config java
+	
+To install tomcat:
+
+	Download Tomcat:: this will download the tomcat .tar file
+		wget http://www.gtlib.gatech.edu/pub/apache/tomcat/tomcat-8/v8.5.34/bin/apache-tomcat-8.5.34.tar.gz
+
+	ls -- this will list the downloaded tomcat tar file
+	
+	Install tomcat
+		tar xvfz <downloaded tomcat file name with extension>
+
+To start tomcat server		
+	Go to bin folder of tomcat & execute startup.sh
+	
+	./startup.sh
+	
+To test tomcat is up & running
+	 wget http://localhost:8080 -- will be successfull
+	 
+	 try to open tomcat through browser, it will get failed
+	 
+Facing conection refused with above command? this is because we have logged in as user.. so login as super user & start the server again to avoid this issue
+
+sudo su
+
+./startup.sh
+
+try .. wget http://localhost:8080 -- successfull, with status as 200 OK.
+
+	but try to open tomcat through browser, it will get failed
+	
+Still tomcat is not up? this is because of firewall in AWS.. go to AWS - EC2 Management Console - Launch Instance page (where we copied instance & DNS name)
+.. last tab Security Group .. click on that & click inbound tab .. edit .. add rule .. type :: custom TCP rule, port :: 8080 .. remaining as it is.
+
+now refresh & see, tomcat will  be up & running in browser..
+
+try to deploy any war file through admin/manager console, it will prompt for user name & password..
+
+so, edit the tomcat-user.xml file inside conf folder of tomcat.. provide username, password & assign roles to that user...
+
+shutdown & restart the server again... username & password should work now....
+
+Still facing authentication issue, then go to webapps/manager/web.xml file & comment the security constraints tag...
+
+shutdown & restart the server again.. now username/password will not be prompted
+
+=====
+8070
+4848
+8181

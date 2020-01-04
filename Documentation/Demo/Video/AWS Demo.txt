@@ -1,0 +1,33 @@
+http://ec2-52-87-184-185.compute-1.amazonaws.com:8454/AWSDemo/swagger-ui.html#/
+
+http://ec2-52-87-184-185.compute-1.amazonaws.com:8454/AWSDemo/App/healthCheck
+
+========
+
+Demo of Employee Management App
+
+Lets open the Swagger UI Page of Employee Management
+
+Performing the health check of the App - we could see App is up & running fine!
+
+Lets perform the Employee Management CRUD Operation
+
+This API is for creating a new Employee - New Employee has been created.
+
+Lets check whether this new employee has been added by listing out all the employees...
+
+TestingDemoFlex has been added to the Employee Management App
+
+Now let's try to update the employee details!
+
+Modifying the email ID of the employee...
+
+Let's verify whether the details have been updated or not...
+
+Employee Details have been updated properly!
+
+Now lets try to delete the employee..
+
+Lets verify it by retrieving the employee details...
+
+Here, TestingDemoFlex have been deleted from the Employee Management...
